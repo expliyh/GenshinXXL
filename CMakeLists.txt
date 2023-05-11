@@ -14,7 +14,7 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(GenshinXXL main.cpp startmenu.cpp startmenu.h startmenu.ui utils/Characters.hpp)
+add_executable(GenshinXXL main.cpp startmenu.cpp startmenu.h startmenu.ui utils/Characters.cpp utils/Characters.h)
 target_link_libraries(GenshinXXL
         Qt::Core
         Qt::Gui
