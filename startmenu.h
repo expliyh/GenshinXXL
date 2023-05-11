@@ -6,6 +6,8 @@
 #define GENSHINXXL_STARTMENU_H
 
 #include <QMainWindow>
+#include <QDebug>
+#include <QScreen>
 
 
 QT_BEGIN_NAMESPACE

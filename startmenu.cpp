@@ -10,7 +10,10 @@
 
 StartMenu::StartMenu(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::StartMenu) {
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QSize screenSize = screen->geometry().size();
     ui->setupUi(this);
+    qDebug() << screenSize.width();
 }
 
 StartMenu::~StartMenu() {
