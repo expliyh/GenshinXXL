@@ -12,5 +12,5 @@ int main(int argc, char *argv[]) {
     qDebug() << QFontDatabase::applicationFontFamilies(fontid);
     StartMenu startMenu;
     startMenu.showFullScreen();
-    a.exec();
+    QApplication::exec();
 }

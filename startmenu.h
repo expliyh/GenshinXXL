@@ -11,6 +11,11 @@
 #include <QPixmap>
 #include <QPicture>
 #include <QPainter>
+#include <QApplication>
+#include <QGuiApplication>
+#include <QGraphicsBlurEffect>
+#include <QKeyEvent>
+#include <QFile>
 
 
 QT_BEGIN_NAMESPACE
@@ -23,6 +28,8 @@ Q_OBJECT
 public:
     explicit StartMenu(QWidget *parent = nullptr);
 
+    void keyPressEvent(QKeyEvent *event) override;
+
     ~StartMenu() override;
 
 private:
@@ -31,6 +38,12 @@ private:
     QSize screenSize;
 
     void paintEvent(QPaintEvent *event) override;
+
+    QPixmap backgroundPixmap;
+
+    QImage backgroundImage;
+
+    double scaleRate;
 };
 
 
