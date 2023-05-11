@@ -8,6 +8,9 @@
 #include <QMainWindow>
 #include <QDebug>
 #include <QScreen>
+#include <QPixmap>
+#include <QPicture>
+#include <QPainter>
 
 
 QT_BEGIN_NAMESPACE
@@ -24,6 +27,10 @@ public:
 
 private:
     Ui::StartMenu *ui;
+
+    QSize screenSize;
+
+    void paintEvent(QPaintEvent *event) override;
 };
 
 
