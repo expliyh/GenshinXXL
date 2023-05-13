@@ -10,6 +10,10 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QMediaPlayer>
+#include <QScreen>
+#include <QSizePolicy>
+#include <QGridLayout>
+#include "QCharacter.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -24,14 +28,30 @@ public:
 
     ~GameWindow() override;
 
+private slots:
+
+    void enterGame();
+
+    void characterPressed(int x, int y);
+
 private:
     Ui::GameWindow *ui;
 
-    void keyPressEvent(QKeyEvent* event) override;
+    QCharacter *table_picture[500][500]{};
+
+    void keyPressEvent(QKeyEvent *event) override;
+
+    bool entered;
+
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
 
     QPixmap backgroundPixmap;
 
     void paintEvent(QPaintEvent *event) override;
+
+    QSize screenSize;
+    double scaleRate;
 };
 
 
