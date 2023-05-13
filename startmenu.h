@@ -16,6 +16,7 @@
 #include <QGraphicsBlurEffect>
 #include <QKeyEvent>
 #include <QFile>
+#include "gamewindow.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +33,10 @@ public:
 
     ~StartMenu() override;
 
+private slots:
+
+    void gameStart();
+
 private:
     Ui::StartMenu *ui;
 
@@ -42,6 +47,12 @@ private:
     QPixmap backgroundPixmap;
 
     QImage backgroundImage;
+
+    QMediaPlayer *player;
+
+    QAudioOutput *audioOutput;
+
+    GameWindow *game;
 
     double scaleRate;
 };

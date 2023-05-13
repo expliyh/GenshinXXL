@@ -4,12 +4,19 @@
 
 // You may need to build the project (run Qt uic code generator) to get "ui_StartMenu.h" resolved
 
+#include <QAudioOutput>
 #include "startmenu.h"
 #include "ui_StartMenu.h"
 
 
 StartMenu::StartMenu(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::StartMenu) {
+    this->audioOutput = new QAudioOutput;
+    this->player = new QMediaPlayer;
+    player->setAudioOutput(audioOutput);
+    player->setSource(QUrl::fromLocalFile("musics/Take the Journey.mp3"));
+    player->play();
+    this->game = nullptr;
     QFile qssFile("startmenu.qss");
     if (qssFile.open(QFile::ReadOnly)) {
         this->setStyleSheet(qssFile.readAll());
@@ -22,7 +29,7 @@ StartMenu::StartMenu(QWidget *parent) :
     this->scaleRate = qApplication->devicePixelRatio();
     qDebug() << screen->physicalDotsPerInch();
     QFont menuFont = QFont("HYWenHei-85W", 60);
-    QFont buttonFont = QFont("HYWenHei-85W", 40);
+//    QFont buttonFont = QFont("HYWenHei-85W", 40);
     QString back_path = "./images/backgrounds/landscape/1.0KV-2560x1440.png";
     this->backgroundImage = QImage(back_path).scaled(this->screenSize * this->scaleRate, Qt::KeepAspectRatio,
                                                      Qt::SmoothTransformation);
@@ -44,7 +51,11 @@ StartMenu::StartMenu(QWidget *parent) :
     buttonBlurEffect->setBlurRadius(55);
     buttonBlurEffect->setBlurHints(QGraphicsBlurEffect::QualityHint);
     QRect newGameButtonRect = QRect(275, 600, 190, 55);
-    ui->newGameButton->setText("新游戏");
+    if (this->game == nullptr) {
+        ui->newGameButton->setText("新游戏");
+    } else {
+        ui->newGameButton->setText("继续游戏");
+    }
     ui->newGameButton->setGeometry(newGameButtonRect);
 //    Set continue button
     QRect continueButtonRect = QRect(275, 700, 190, 55);
@@ -52,6 +63,7 @@ StartMenu::StartMenu(QWidget *parent) :
     ui->continueButton->setGeometry(continueButtonRect);
     qDebug() << "Screen screenSize: " << screenSize.width() * this->scaleRate << 'x'
              << screenSize.height() * this->scaleRate;
+    connect(ui->newGameButton, &QPushButton::clicked, this, &StartMenu::gameStart);
 }
 
 StartMenu::~StartMenu() {
@@ -70,5 +82,14 @@ void StartMenu::keyPressEvent(QKeyEvent *event) {
         default:
             QWidget::keyPressEvent(event);
     }
+}
+
+void StartMenu::gameStart() {
+    qDebug() << "Success";
+    delete this->game;
+    this->game = new GameWindow;
+    game->showFullScreen();
+    player->stop();
+    this->hide();
 }
 

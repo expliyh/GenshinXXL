@@ -7,8 +7,8 @@ QPushButton
 	border-color: #D6CBAB;
 	font: normal 22px;
 	min-width:2em;
-	color:"#A69B8F"; /*字体颜色*/
-	font-family:"HYWenHei-85W";
+	color: #A69B8F; /*字体颜色*/
+	font-family: "HYWenHei-85W";
 	padding: 5px;
 }
 
