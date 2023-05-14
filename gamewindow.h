@@ -14,6 +14,7 @@
 #include <QSizePolicy>
 #include <QGridLayout>
 #include "QCharacter.h"
+#include "QCharaContainer.h"
 
 
 QT_BEGIN_NAMESPACE

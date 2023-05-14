@@ -1,0 +1,21 @@
+{
+  "type": "Theme",
+  "name": "Genshin",
+  "name_cn": "怎么你了",
+  "prefix": "genshin",
+  "characters": [
+    {
+      "name": "艾尔海森",
+      "filename": "AiErHaiSen.png"
+    },
+    {
+      "name": "迪卢克",
+      "filename": "DiLuKe.png"
+    }
+  ],
+  "musics": {
+    "menu": [
+      "Take the Journey.mp3"
+    ]
+  }
+}

@@ -8,6 +8,8 @@ set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_PREFIX_PATH "C:/Qt/6.5.0/msvc2019_64")
 
+include_directories(include)
+
 add_compile_options(/Zc:__cplusplus)
 add_compile_options(/utf-8)
 
@@ -20,7 +22,7 @@ find_package(Qt6 COMPONENTS
         Network
         REQUIRED)
 
-add_executable(GenshinXXL main.cpp startmenu.cpp startmenu.h startmenu.ui utils/Characters.cpp utils/Characters.h gamewindow.cpp gamewindow.h gamewindow.ui QCharacter.cpp QCharacter.h CharacterWidget.cpp CharacterWidget.h)
+add_executable(GenshinXXL main.cpp startmenu.cpp startmenu.h startmenu.ui utils/Characters.cpp utils/Characters.h gamewindow.cpp gamewindow.h gamewindow.ui QCharacter.cpp QCharacter.h CharacterWidget.cpp CharacterWidget.h QCharaContainer.cpp QCharaContainer.h CharacterImages.cpp CharacterImages.h externs.h Themes.cpp Themes.h)
 target_link_libraries(GenshinXXL
         Qt::Core
         Qt::Gui

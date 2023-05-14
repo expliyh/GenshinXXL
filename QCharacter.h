@@ -10,9 +10,9 @@
 #include <QMouseEvent>
 
 class QCharacter : public QLabel {
-    Q_OBJECT;
+Q_OBJECT;
 public:
-    QCharacter(QWidget *parent, int x, int y) : QLabel(parent), pos(x, y) {
+    QCharacter(QWidget *parent, int x, int y) : QLabel(parent), pos(x, y), selected(false) {
 
     }
 
@@ -29,6 +29,14 @@ signals:
 
 private:
     std::pair<int, int> pos;
+
+    bool selected;
+
+    void addBorder();
+
+    void removeBorder();
+
+    void enterEvent(QEnterEvent *event) override;
 
     void mousePressEvent(QMouseEvent *event) override;
 
