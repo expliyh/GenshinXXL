@@ -17,6 +17,7 @@
 #include <QKeyEvent>
 #include <QFile>
 #include "gamewindow.h"
+#include "levelmenu.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -33,9 +34,25 @@ public:
 
     ~StartMenu() override;
 
+protected:
+
+    int difficulty;
+
+    bool diffcultySelected;
+
+public:
+
+    [[nodiscard]] int getDifficulty() const;
+
+    void setDifficulty(int difficulty);
+
+    bool isDifficultySelected();
+
 private slots:
 
     void gameStart();
+
+    void difficultySelect();
 
 private:
     Ui::StartMenu *ui;
@@ -53,6 +70,8 @@ private:
     QAudioOutput *audioOutput;
 
     GameWindow *game;
+
+    LevelMenu *levelMenu;
 
     double scaleRate;
 };

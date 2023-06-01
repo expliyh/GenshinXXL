@@ -10,7 +10,8 @@
 
 
 StartMenu::StartMenu(QWidget *parent) :
-        QMainWindow(parent), ui(new Ui::StartMenu) {
+        QMainWindow(parent), ui(new Ui::StartMenu),
+        diffcultySelected(false), difficulty(0) {
     this->audioOutput = new QAudioOutput;
     this->player = new QMediaPlayer;
     player->setAudioOutput(audioOutput);
@@ -50,13 +51,19 @@ StartMenu::StartMenu(QWidget *parent) :
     auto buttonBlurEffect = new QGraphicsBlurEffect;
     buttonBlurEffect->setBlurRadius(55);
     buttonBlurEffect->setBlurHints(QGraphicsBlurEffect::QualityHint);
-    QRect newGameButtonRect = QRect(275, 600, 190, 55);
+    QRect newGameButtonRect = QRect(275, 500, 190, 55);
     if (this->game == nullptr) {
         ui->newGameButton->setText("新游戏");
     } else {
         ui->newGameButton->setText("继续游戏");
     }
     ui->newGameButton->setGeometry(newGameButtonRect);
+//    Set difficulty button
+    QRect difficultyButtonRect = QRect(275, 600, 190, 55);
+    ui->difficultyButton->setText("难度选择");
+    ui->difficultyButton->setGeometry(difficultyButtonRect);
+    connect(ui->difficultyButton, &QPushButton::clicked, this, &StartMenu::difficultySelect);
+
 //    Set continue button
     QRect continueButtonRect = QRect(275, 700, 190, 55);
     ui->continueButton->setText("继续游戏");
@@ -64,6 +71,7 @@ StartMenu::StartMenu(QWidget *parent) :
     qDebug() << "Screen screenSize: " << screenSize.width() * this->scaleRate << 'x'
              << screenSize.height() * this->scaleRate;
     connect(ui->newGameButton, &QPushButton::clicked, this, &StartMenu::gameStart);
+    this->levelMenu = new LevelMenu;
 }
 
 StartMenu::~StartMenu() {
@@ -91,5 +99,21 @@ void StartMenu::gameStart() {
     game->showFullScreen();
     player->stop();
     this->hide();
+}
+
+int StartMenu::getDifficulty() const {
+    return difficulty;
+}
+
+void StartMenu::setDifficulty(int difficulty) {
+    StartMenu::difficulty = difficulty;
+}
+
+void StartMenu::difficultySelect() {
+    this->levelMenu->showFullScreen();
+}
+
+bool StartMenu::isDifficultySelected() {
+    return this->diffcultySelected;
 }
 

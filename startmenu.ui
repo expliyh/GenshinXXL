@@ -64,7 +64,7 @@
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>250</y>
+      <y>290</y>
       <width>141</width>
       <height>24</height>
      </rect>
@@ -76,6 +76,22 @@
      <string>Button: Continue</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="difficultyButton">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>250</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>CrossCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string>Button：Diffiuclty</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -83,7 +99,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>

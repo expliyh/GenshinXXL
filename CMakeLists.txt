@@ -19,7 +19,7 @@ find_package(Qt6 COMPONENTS
         Network
         REQUIRED)
 
-add_executable(GenshinXXL main.cpp startmenu.cpp startmenu.h startmenu.ui utils/Characters.cpp utils/Characters.h gamewindow.cpp gamewindow.h gamewindow.ui QCharacter.cpp QCharacter.h CharacterWidget.cpp CharacterWidget.h QCharaContainer.cpp QCharaContainer.h CharacterImages.cpp CharacterImages.h externs.h Themes.cpp Themes.h)
+add_executable(GenshinXXL main.cpp startmenu.cpp startmenu.h startmenu.ui utils/Characters.cpp utils/Characters.h gamewindow.cpp gamewindow.h gamewindow.ui QCharacter.cpp QCharacter.h CharacterWidget.cpp CharacterWidget.h QCharaContainer.cpp QCharaContainer.h CharacterImages.cpp CharacterImages.h externs.h Themes.cpp Themes.h levelmenu.cpp levelmenu.h difficultybrief.cpp difficultybrief.h QPushButtonWithHoverSignal.cpp)
 target_link_libraries(GenshinXXL
         Qt::Core
         Qt::Gui
