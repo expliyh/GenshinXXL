@@ -16,6 +16,7 @@
 #include<iostream>
 #include <QPushButton>
 #include "Themes.h"
+#include "CountdownWidget.h"
 
 using namespace std;
 
@@ -47,7 +48,7 @@ public:
 
     int down(int row, int col);
 
-    bool judge(int row1, int col1, int row2, int col2);
+    bool judge(int row1, int col1, int row2, int col2, bool);
 
     void easyPosition();
 
@@ -57,9 +58,15 @@ public:
 
     void drawLine(const int &row1, const int &col1, const int &row2, const int &col2, const int &row3, const int &col3);
 
+    void checkButton(QPushButton *button);
+
+    void uncheckButton(QPushButton *button, const QString &oldStyleSheet);
+
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+
+    CountdownWidget *countdownWidget;
 
 private:
     Ui::GameWidget *ui;
@@ -92,6 +99,7 @@ public slots:
 
 private:
     void generate(QWidget *widget, QString &styleSheet);
+
     void reGenerate();
 };
 

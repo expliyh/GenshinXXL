@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QTimer>
+#include <QtSvg/QSvgRenderer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class GameWidget; }
@@ -32,10 +33,16 @@ private slots:
 
     void updateCountdown();
 
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 private:
     int remainingTime;
-    QLabel *label;
+    QLabel *timeLabel;
     QTimer *timer;
+    QPixmap *icon;
+    QSvgRenderer *icon_renderer;
+    QLabel *iconLabel;
 };
 
 

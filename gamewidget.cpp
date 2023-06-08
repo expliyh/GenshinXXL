@@ -24,26 +24,29 @@ GameWidget::GameWidget(QWidget *parent, int difficulty) :
     this->hardBackground = new QPixmap("images/backgrounds/landscape/1.0KV-2560x1440.png");
 //    this->setFixedSize(1600, 900);
     this->theme = Theme();
-    auto *rearrange = new QPushButton(this);
-    auto *prompt = new QPushButton(this);
+    auto *rearrangeButton = new QPushButton(this);
+    auto *promptButton = new QPushButton(this);
     QFile qssFile("startmenu.qss"); // 替换为你的QSS文件路径
     qssFile.open(QFile::ReadOnly);
     QString styleSheet = QLatin1String(qssFile.readAll());
     qssFile.close();
-    rearrange->setStyleSheet(styleSheet);
-    prompt->setStyleSheet(styleSheet);
-    rearrange->setText("重排");
-    prompt->setText("提示");
-    prompt->setGeometry(1300, 50, 100, 50);
-    connect(prompt, &QPushButton::clicked, this, &GameWidget::prompt);
-    rearrange->setGeometry(1300, 150, 100, 50);
-    connect(rearrange, &QPushButton::clicked, this, &GameWidget::rearrange);
-    prompt->show();
-    rearrange->show();
+    rearrangeButton->setStyleSheet(styleSheet);
+    promptButton->setStyleSheet(styleSheet);
+    rearrangeButton->setText("重排");
+    promptButton->setText("提示");
+    promptButton->setGeometry(1300, 70, 200, 50);
+    connect(promptButton, &QPushButton::clicked, this, &GameWidget::prompt);
+    rearrangeButton->setGeometry(1300, 170, 200, 50);
+    connect(rearrangeButton, &QPushButton::clicked, this, &GameWidget::rearrange);
+    promptButton->show();
+    rearrangeButton->show();
     born();
     winJudge = position.size() * position.size();
     connect(this, &GameWidget::getxy, this, &GameWidget::Delete);
-
+    this->countdownWidget = new CountdownWidget(this);
+    countdownWidget->show();
+    countdownWidget->setGeometry(1300, 270, 200, 50);
+    countdownWidget->startCountdown();
 }
 
 GameWidget::~GameWidget() {
@@ -158,7 +161,7 @@ void GameWidget::Delete(int row, int col) {
                 firstButton.emplace(button);
                 button->setEnabled(false);
             } else {
-                if (judge(xy.front().first, xy.front().second, row, col)) {
+                if (judge(xy.front().first, xy.front().second, row, col, false)) {
                     position[xy.front().first][xy.front().second] = -1;
                     position[row][col] = -1;
                     firstButton.front()->hide();
@@ -249,14 +252,14 @@ int GameWidget::right(int row, int col) {
     }
 }
 
-bool GameWidget::judge(int row1, int col1, int row2, int col2) {
+bool GameWidget::judge(int row1, int col1, int row2, int col2, bool no_draw = false) {
     if (row1 == row2 && col1 == col2) return false;
     else if (position[row1][col1] != position[row2][col2]) return false;
     else if (row1 == row2 && abs(col1 - col2) == 1) {
-        drawLine(row1, col1, row2, col2, row2, col2);
+        if (!no_draw) drawLine(row1, col1, row2, col2, row2, col2);
         return true;
     } else if (col1 == col2 && abs(row1 - row2) == 1) {
-        drawLine(row1, col1, row2, col2, row2, col2);
+        if (!no_draw) drawLine(row1, col1, row2, col2, row2, col2);
         return true;
     } else {
         int right1 = right(row1, col1);
@@ -271,7 +274,7 @@ bool GameWidget::judge(int row1, int col1, int row2, int col2) {
             for (int j = (row2 + down2); j >= (row2 + up2); j--) {
                 if (i == j) {
                     if (i == -1 || i == position.size()) {
-                        drawLine(i, col1, i, col2, row2, col2);
+                        if (!no_draw) drawLine(i, col1, i, col2, row2, col2);
                         return true;
                     }
                     int t = 0;
@@ -283,7 +286,7 @@ bool GameWidget::judge(int row1, int col1, int row2, int col2) {
                         }
                     }
                     if (t == 0) {
-                        drawLine(i, col1, i, col2, row2, col2);
+                        if (!no_draw) drawLine(i, col1, i, col2, row2, col2);
                         return true;
                     }
                 }
@@ -293,19 +296,19 @@ bool GameWidget::judge(int row1, int col1, int row2, int col2) {
             for (int j = (col2 + right2); j >= (col2 + left2); j--) {
                 if (i == j) {
                     if (i == -1 || i == position.size()) {
-                        drawLine(row1, i, row2, i, row2, col2);
+                        if (!no_draw) drawLine(row1, i, row2, i, row2, col2);
                         return true;
                     }
                     int t = 0;
                     int s = row1 < row2 ? row1 : row2;
                     for (int k = abs(row1 - row2) - 1; k >= 1; k--) {
-                        if (position[s + k][i] != 0) {
+                        if (position[s + k][i] >= 0) {
                             t++;
                             break;
                         }
                     }
                     if (t == 0) {
-                        drawLine(row1, i, row2, i, row2, col2);
+                        if (!no_draw) drawLine(row1, i, row2, i, row2, col2);
                         return true;
                     }
                 }
@@ -408,13 +411,13 @@ void GameWidget::prompt() {
                 if (j == position.size() - 1 && i != position.size() - 1) {
                     for (int s = i + 1; s < position.size(); s++) {
                         for (int t = 0; t < position.size(); t++) {
-                            if (judge(i, j, s, t)) {
+                            if (judge(i, j, s, t, true)) {
                                 auto *item1 = layout->itemAtPosition(i, j);
                                 auto *item2 = layout->itemAtPosition(s, t);
                                 auto *button1 = qobject_cast<QPushButton *>(item1->widget());
                                 auto *button2 = qobject_cast<QPushButton *>(item2->widget());
-                                button1->setChecked(true);
-                                button2->setChecked(true);
+//                                button1->setChecked(true);
+//                                button2->setChecked(true);
                                 return;
                             }
                         }
@@ -424,26 +427,26 @@ void GameWidget::prompt() {
                     for (int s = i; s < position.size(); s++) {
                         if (o == 0) {
                             for (int t = j + 1; t < position.size(); t++) {
-                                if (judge(i, j, s, t)) {
+                                if (judge(i, j, s, t, true)) {
                                     auto *item1 = layout->itemAtPosition(i, j);
                                     auto *item2 = layout->itemAtPosition(s, t);
                                     auto *button1 = qobject_cast<QPushButton *>(item1->widget());
                                     auto *button2 = qobject_cast<QPushButton *>(item2->widget());
-                                    button1->setChecked(true);
-                                    button2->setChecked(true);
+                                    this->checkButton(button1);
+                                    this->checkButton(button2);
                                     return;
                                 }
                             }
                             o++;
                         } else {
                             for (int t = 0; t < position.size(); t++) {
-                                if (judge(i, j, s, t)) {
+                                if (judge(i, j, s, t, true)) {
                                     auto *item1 = layout->itemAtPosition(i, j);
                                     auto *item2 = layout->itemAtPosition(s, t);
                                     auto *button1 = qobject_cast<QPushButton *>(item1->widget());
                                     auto *button2 = qobject_cast<QPushButton *>(item2->widget());
-                                    button1->setChecked(true);
-                                    button2->setChecked(true);
+                                    this->checkButton(button1);
+                                    this->checkButton(button2);
                                     return;
                                 }
                             }
@@ -455,6 +458,7 @@ void GameWidget::prompt() {
             }
         }
     }
+    this->update();
 }
 
 void GameWidget::reGenerate() {
@@ -476,6 +480,12 @@ void GameWidget::reGenerate() {
             }
         }
     }
+}
+
+void GameWidget::checkButton(QPushButton *button) {
+    auto oldStyleSheet = button->styleSheet();
+    QString newStyleSheet = oldStyleSheet + "border: 2px solid red;";
+    button->setStyleSheet(newStyleSheet);
 }
 
 

@@ -17,6 +17,7 @@ find_package(Qt6 COMPONENTS
         Multimedia
         MultimediaWidgets
         Network
+        Svg
         REQUIRED)
 
 add_executable(GenshinXXL main.cpp startmenu.cpp startmenu.h startmenu.ui utils/Characters.cpp utils/Characters.h gamewindow.cpp gamewindow.h gamewindow.ui QCharacter.cpp QCharacter.h CharacterWidget.cpp CharacterWidget.h QCharaContainer.cpp QCharaContainer.h CharacterImages.cpp CharacterImages.h externs.h Themes.cpp Themes.h QPushButtonWithHoverSignal.cpp gamewidget.h gamewidget.cpp CountdownWidget.cpp CountdownWidget.h)
@@ -27,6 +28,7 @@ target_link_libraries(GenshinXXL
         Qt::Multimedia
         Qt::MultimediaWidgets
         Qt::Network
+        Qt::Svg
         )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
@@ -59,7 +61,16 @@ if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
                 "${QT_INSTALL_PATH}/plugins/multimedia/"
                 "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/multimedia/")
     endif ()
-    foreach (QT_LIB Core Gui Widgets Multimedia MultimediaWidgets Network)
+    if (EXISTS "${QT_INSTALL_PATH}/plugins/imageformats/")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E make_directory
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/imageformats/")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${QT_INSTALL_PATH}/plugins/imageformats/"
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/imageformats/")
+    endif ()
+    foreach (QT_LIB Core Gui Widgets Multimedia MultimediaWidgets Network Svg)
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
                 "${QT_INSTALL_PATH}/bin/Qt6${QT_LIB}${DEBUG_SUFFIX}.dll"
