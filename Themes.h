@@ -7,9 +7,12 @@
 
 #include <string>
 #include <vector>
+#include <QPixmap>
 
 
 struct Theme {
+    Theme();
+
     std::string name;
     std::string name_cn;
     std::vector<std::string> menu_songs;
@@ -19,13 +22,7 @@ struct Theme {
     std::vector<std::string> menu_backgrounds;
     std::vector<std::string> fight_backgrounds;
     std::vector<std::string> characters;
-};
-
-class Themes {
-private:
-    std::string theme_file;
-
-    void parseTheme();
+    std::vector<QPixmap> characters_pixmap;
 };
 
 

@@ -5,13 +5,14 @@
 // You may need to build the project (run Qt uic code generator) to get "ui_StartMenu.h" resolved
 
 #include <QAudioOutput>
+#include <exception>
 #include "startmenu.h"
 #include "ui_StartMenu.h"
 
 
 StartMenu::StartMenu(QWidget *parent) :
-        QMainWindow(parent), ui(new Ui::StartMenu),
-        diffcultySelected(false), difficulty(0) {
+        QMainWindow(parent), ui(new Ui::StartMenu), difficulty(0) {
+    this->diffcultySelected = 0;
     this->audioOutput = new QAudioOutput;
     this->player = new QMediaPlayer;
     player->setAudioOutput(audioOutput);
@@ -59,10 +60,21 @@ StartMenu::StartMenu(QWidget *parent) :
     }
     ui->newGameButton->setGeometry(newGameButtonRect);
 //    Set difficulty button
-    QRect difficultyButtonRect = QRect(275, 600, 190, 55);
-    ui->difficultyButton->setText("难度选择");
-    ui->difficultyButton->setGeometry(difficultyButtonRect);
-    connect(ui->difficultyButton, &QPushButton::clicked, this, &StartMenu::difficultySelect);
+//    QRect difficultyButtonRect = QRect(275, 600, 190, 55);
+    ui->buttonEasy->setText("简单");
+    ui->buttonNormal->setText("普通");
+    ui->buttonHard->setText("困难");
+    ui->buttonCustomize->setText("自定义");
+    ui->buttonEasy->setGeometry(275, 570, 90, 55);
+    ui->buttonNormal->setGeometry(375, 570, 90, 55);
+    ui->buttonHard->setGeometry(275, 630, 90, 55);
+    ui->buttonCustomize->setGeometry(375, 630, 90, 55);
+    ui->newGameButton->setEnabled(false);
+    connect(ui->buttonEasy, &QPushButton::clicked, this, &StartMenu::on_buttonEasy_clicked);
+    connect(ui->buttonNormal, &QPushButton::clicked, this, &StartMenu::on_buttonNormal_clicked);
+    connect(ui->buttonHard, &QPushButton::clicked, this, &StartMenu::on_buttonHard_clicked);
+    connect(ui->buttonCustomize, &QPushButton::clicked, this, &StartMenu::on_buttonCustomize_clicked);
+
 
 //    Set continue button
     QRect continueButtonRect = QRect(275, 700, 190, 55);
@@ -71,7 +83,6 @@ StartMenu::StartMenu(QWidget *parent) :
     qDebug() << "Screen screenSize: " << screenSize.width() * this->scaleRate << 'x'
              << screenSize.height() * this->scaleRate;
     connect(ui->newGameButton, &QPushButton::clicked, this, &StartMenu::gameStart);
-    this->levelMenu = new LevelMenu;
 }
 
 StartMenu::~StartMenu() {
@@ -95,7 +106,7 @@ void StartMenu::keyPressEvent(QKeyEvent *event) {
 void StartMenu::gameStart() {
     qDebug() << "Success";
     delete this->game;
-    this->game = new GameWindow;
+    this->game = new GameWidget(nullptr, this->difficulty);
     game->showFullScreen();
     player->stop();
     this->hide();
@@ -109,11 +120,38 @@ void StartMenu::setDifficulty(int difficulty) {
     StartMenu::difficulty = difficulty;
 }
 
-void StartMenu::difficultySelect() {
-    this->levelMenu->showFullScreen();
+void StartMenu::on_buttonEasy_clicked() {
+    ui->buttonEasy->setEnabled(false);
+    ui->buttonNormal->setEnabled(true);
+    ui->buttonHard->setEnabled(true);
+    ui->buttonCustomize->setEnabled(true);
+    ui->newGameButton->setEnabled(true);
+    this->setDifficulty(0);
 }
 
-bool StartMenu::isDifficultySelected() {
-    return this->diffcultySelected;
+void StartMenu::on_buttonNormal_clicked() {
+    ui->buttonEasy->setEnabled(true);
+    ui->buttonNormal->setEnabled(false);
+    ui->buttonHard->setEnabled(true);
+    ui->buttonCustomize->setEnabled(true);
+    ui->newGameButton->setEnabled(true);
+    this->setDifficulty(1);
+}
+
+void StartMenu::on_buttonHard_clicked() {
+    ui->buttonEasy->setEnabled(true);
+    ui->buttonNormal->setEnabled(true);
+    ui->buttonHard->setEnabled(false);
+    ui->buttonCustomize->setEnabled(true);
+    ui->newGameButton->setEnabled(true);
+    this->setDifficulty(2);
+}
+
+void StartMenu::on_buttonCustomize_clicked() {
+    ui->buttonEasy->setEnabled(true);
+    ui->buttonNormal->setEnabled(true);
+    ui->buttonHard->setEnabled(true);
+    ui->buttonCustomize->setEnabled(false);
+    ui->newGameButton->setEnabled(true);
 }
 

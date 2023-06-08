@@ -1,0 +1,28 @@
+QPushButton
+{
+	border-style: groove;
+	border-width: 2px;
+	border-color: black;
+}
+
+QPushButton:checked
+{
+	border-style: groove;
+    border-width: 2px;
+    border-color: blue;
+}
+
+QPushButton:pressed
+{
+	border-style: groove;
+    border-width: 2px;
+    border-color: green;
+}
+
+QPushButton:!enabled
+{
+	border-style: groove;
+    border-width: 2px;
+    border-color: green;
+}
+

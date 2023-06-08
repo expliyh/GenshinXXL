@@ -21,8 +21,10 @@ QPushButton:hover
 QPushButton:pressed
 {
 	background-color: rgba(227,223,212,90%); /*伪状态经过时背景色*/
+	border-style: inset;
 }
 QPushButton:!enabled{
 	background-color: rgb(100, 100, 100);
+	color: rgb(255, 255, 255);
 	border-style: inset;
 }
